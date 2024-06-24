@@ -92,6 +92,13 @@ class Paitent
   def self.waiting_minus
       @@waiting -= 1
   end
+  def update_patient(name , age, diseases, email)
+      @name = name 
+      @age = age
+      @disease = diseases
+      @email = email
+  end
+
 end
 
 # main
@@ -132,6 +139,76 @@ end
       end
   end
 
+  def vaild_name
+    print "Enter name of the paitent :"
+      valid = true
+      regex = /\A[A-Za-z]+(([' -][A-Za-z])?[A-Za-z]*)*\z/
+      while valid
+          begin
+              name = gets.chomp
+              if(name.match?(regex))
+                  valid = false
+              else
+                  raise Slot_exception.new("Please Enter a valid name\n")
+              end
+          rescue Slot_exception => caught
+              puts "#{caught.message}"
+              redo 
+          end
+      end
+      return name
+    end
+
+    def vald_age
+      print "Enter age of the paitent :"
+      valid = true
+      regex = /^(100|[1-9]?[0-9])$/
+      while valid
+          begin
+              age = gets.chomp
+              if(age.match?(regex))
+                  if(age.to_i > 100 || age.to_i <0)
+                      raise Slot_exception.new("Enter a valid age between 0 - 100\n")
+                  else
+                      valid = false
+                  end
+              else
+                  raise Slot_exception.new("Age is accpted in number between 0 - 100\n")
+              end
+          rescue Slot_exception => caught
+              puts "#{caught.message}"
+              redo 
+          end
+      end
+      return age
+    end
+    
+    def valid_email
+      print "Enter Email of the user : "
+      valid = true
+      regex = /\A[a-zA-Z0-9.]+@gmail\.com\z/
+      email =""
+      while valid
+          begin
+              email = gets.chomp
+              if (email.match?(regex))
+                  Paitent.paitent_list.each do |var|
+                      if(var.email == email)
+                          raise Slot_exception.new("Email already exist please enter another one")
+                      end
+                  end
+                  valid = false
+              else
+                  raise Slot_exception.new("Invaild email address please enter valid email")
+              end
+          rescue Slot_exception => caught
+              puts "#{caught.message}"
+              redo 
+          end
+          
+      end
+      return email
+    end
   # add paitent to the slot method
   
   def add_paitent(slot_arr)
@@ -161,67 +238,12 @@ end
           end
       end
 
-      print "Enter name of the paitent :"
-      valid = true
-      regex = /\A[A-Za-z]+(([' -][A-Za-z])?[A-Za-z]*)*\z/
-      while valid
-          begin
-              name = gets.chomp
-              if(name.match?(regex))
-                  valid = false
-              else
-                  raise Slot_exception.new("Please Enter a valid name\n")
-              end
-          rescue Slot_exception => caught
-              puts "#{caught.message}"
-              redo 
-          end
-      end
-      print "Enter age of the paitent :"
-      valid = true
-      regex = /^(100|[1-9]?[0-9])$/
-      while valid
-          begin
-              age = gets.chomp
-              if(age.match?(regex))
-                  if(age.to_i > 100 || age.to_i <0)
-                      raise Slot_exception.new("Enter a valid age between 0 - 100\n")
-                  else
-                      valid = false
-                  end
-              else
-                  raise Slot_exception.new("Age is accpted in number between 0 - 100\n")
-              end
-          rescue Slot_exception => caught
-              puts "#{caught.message}"
-              redo 
-          end
-      end
+      name =  vaild_name
+      age = vald_age
+      email = valid_email
       print "Enter diseases of the paitent :"
       diseases = gets.chomp
-      print "Enter Email of the user : "
-      valid = true
-      regex = /\A[a-zA-Z0-9.]+@gmail\.com\z/
-      email =""
-      while valid
-          begin
-              email = gets.chomp
-              if (email.match?(regex))
-                  Paitent.paitent_list.each do |var|
-                      if(var.email == email)
-                          raise Slot_exception.new("Email already exist please enter another one")
-                      end
-                  end
-                  valid = false
-              else
-                  raise Slot_exception.new("Invaild email address please enter valid email")
-              end
-          rescue Slot_exception => caught
-              puts "#{caught.message}"
-              redo 
-          end
-          
-      end
+      
       print "Enter swift (Morining or Evening) : "
       swift = gets.chomp
       if wait
@@ -235,14 +257,14 @@ end
       puts "\nData Added Successfullly !!!!\n"
 
   end
-      slot_arr[0] = Paitent.new("narsh",7,"na","hr@email.com","m",1)
-      slot_arr[1] = Paitent.new("varsh",7,"na","hr@email.com","m",2)
-      slot_arr[2] = Paitent.new("darsh",7,"na","hr@email.com","m",3)
-      slot_arr[3] = Paitent.new("carsh",7,"na","hr@email.com","m",4)
-      slot_arr[4] = Paitent.new("tarsh",7,"na","hr@email.com","m",5)
-      slot_arr[5] = Paitent.new("vinyh",7,"na","hr@email.com","m",6)
-      Paitent.new("sursh",7,"na","hr@email.com","m")
-      Paitent.new("gursh",7,"na","hr@email.com","m")
+      slot_arr[0] = Paitent.new("narsh",7,"na","hr1@gmail.com","m",1)
+      slot_arr[1] = Paitent.new("varsh",7,"na","hr2@gmail.com","m",2)
+      slot_arr[2] = Paitent.new("darsh",7,"na","hr3@gmail.com","m",3)
+      slot_arr[3] = Paitent.new("carsh",7,"na","hr4@gmail.com","m",4)
+      slot_arr[4] = Paitent.new("tarsh",7,"na","hr5@gmail.com","m",5)
+      slot_arr[5] = Paitent.new("vinyh",7,"na","hr6@gmail.com","m",6)
+      Paitent.new("sursh",7,"na","hr7@gmail.com","m")
+      Paitent.new("gursh",7,"na","hr8@gmail.com","m")
       $empty_slot = 0
       $books = 6
 
@@ -265,7 +287,7 @@ end
       view_slot_list(slot_arr)
       bool = true
       while bool
-          puts "\npress 1 to add new paitent to empty slot \nPress 2 for delete paitent form slot\nPress 3 for view paitent detail on slot\nPress 4 to view slot list\nPress 5 to view waiting list\nPress 0 for previous menu"
+          puts "\npress 1 to add new paitent to empty slot \nPress 2 for delete paitent form slot\nPress 3 for view paitent detail on slot\nPress 4 to view slot list\nPress 5 to update paitent details \nPress 6 to view waiting list\nPress 0 for previous menu"
           action = gets.to_i
           
           case action
@@ -305,6 +327,48 @@ end
           when 4
               view_slot_list(slot_arr)
           when 5
+              puts "Enter email of the user whose data you want to update"
+              change_obj =""
+              check = true
+              while check
+                email = gets.chomp
+                Paitent.paitent_list.each do |var|
+                  if(var.email == email)
+                      change_obj = var
+                      check = false
+                  end
+                end 
+                if check
+                  puts "enter correct email that you entered previously"
+                end 
+              end
+              check =  true 
+              name = change_obj.name
+              age = change_obj.age 
+              email = change_obj.email
+              disease = change_obj.diseases
+              while check
+                puts "Press 1 to upadate name\nPress 2 to update age\nPress 3 to update diseases\nPress 4 to upadate email\nPress 6 to confirm changes"
+                input =  gets.to_i
+                case input 
+                when 1 
+                  name =  vaild_name
+                when 2 
+                  age = vald_age
+                when 3
+                  puts "Enter diesases to upadate"
+                  disease = gets.chomp
+                when 4 
+                  email = valid_email
+                when 6 
+                  check = false
+                else
+                  puts "Invaild input !!"
+                end
+              end
+              change_obj.update_patient(name,age,disease,email)
+              puts "Changes Made successfully"
+          when 6
               Paitent.view_waiting
           when 0
               bool = false
